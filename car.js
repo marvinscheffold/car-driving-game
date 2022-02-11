@@ -7,12 +7,13 @@ import {
 
 const carElement = document.querySelector("[data-car]");
 
-const CAR_MAX_DRIVE_SPEED = 0.7;
-const CAR_ACCELERATION = 0.007;
-const CAR_DEACCELERATION_BREAK = 0.01;
-const CAR_DEACCELARATION_AUTOMATIC = 0.002;
-const CAR_MAX_TURN_SPEED = 0.08;
-const CAR_DELTA_TURN_SPEED = 0.008;
+const CAR_MAX_DRIVE_SPEED = 0.75;
+const CAR_ACCELERATION = 0.025;
+const CAR_DEACCELERATION_BREAK = 0.03;
+const CAR_DEACCELARATION_AUTOMATIC = 0.008;
+const CAR_MAX_TURN_SPEED = 0.18;
+const CAR_DELTA_TURN_SPEED = 0.025;
+const CAR_MIN_DRIVE_SPEED_TO_TURN = 0.05;
 
 let carState = {
     drivingSpeed: 0,
@@ -20,9 +21,10 @@ let carState = {
 };
 
 let playerInput = {
-    isPushingPedal: false,
+    isPushingGasPedal: false,
+    isInForwardGear: true,
     isTurningWheel: false,
-    isPushingAccelerator: false,
+    isPushingBreak: false,
     isTurningWheelRight: false,
 };
 
@@ -40,10 +42,20 @@ export function setUpCar(mapWidth, mapHeight) {
 }
 
 export function updateCar(delta) {
-    if (playerInput.isPushingPedal) {
-        console.log(playerInput);
-        // Change car speed
-        if (playerInput.isPushingAccelerator) {
+    if (playerInput.isPushingBreak) {
+        // Decrease speed strongly
+        const shouldNegate = carState.drivingSpeed < 0 ? -1 : 1;
+
+        carState.drivingSpeed =
+            carState.drivingSpeed -
+            Math.min(
+                CAR_DEACCELERATION_BREAK,
+                Math.abs(carState.drivingSpeed)
+            ) *
+                shouldNegate;
+    } else if (playerInput.isPushingGasPedal) {
+        // Increase car speed
+        if (playerInput.isInForwardGear) {
             carState.drivingSpeed = Math.min(
                 carState.drivingSpeed + CAR_ACCELERATION,
                 CAR_MAX_DRIVE_SPEED
@@ -54,24 +66,26 @@ export function updateCar(delta) {
                 -CAR_MAX_DRIVE_SPEED
             );
         }
-    } else {
-        // Return speed back to 0
-        if (carState.drivingSpeed > 0) {
-            carState.drivingSpeed = Math.max(
-                carState.drivingSpeed - CAR_DEACCELARATION_AUTOMATIC,
-                0
-            );
-        } else {
-            carState.drivingSpeed = Math.min(
-                carState.drivingSpeed + CAR_DEACCELARATION_AUTOMATIC,
-                0
-            );
-        }
+    } else if (Math.abs(carState.drivingSpeed) > 0) {
+        // Let car roll out and finally stop
+        // Decrease speed softly
+        const shouldNegate = carState.drivingSpeed < 0 ? -1 : 1;
+
+        carState.drivingSpeed =
+            carState.drivingSpeed -
+            Math.min(
+                CAR_DEACCELARATION_AUTOMATIC,
+                Math.abs(carState.drivingSpeed)
+            ) *
+                shouldNegate;
     }
 
-    // Turn car when player turns wheel and car is moving
-    if (playerInput.isTurningWheel && Math.abs(carState.drivingSpeed) > 0) {
-        // Increase turn speed
+    // Turn car when player turns wheel and car is moving fast enough
+    if (
+        playerInput.isTurningWheel &&
+        Math.abs(carState.drivingSpeed) > CAR_MIN_DRIVE_SPEED_TO_TURN
+    ) {
+        // Increase turn speed depending on how fast car is
         if (playerInput.isTurningWheelRight) {
             carState.turningSpeed = Math.min(
                 carState.turningSpeed + CAR_DELTA_TURN_SPEED,
@@ -83,19 +97,14 @@ export function updateCar(delta) {
                 -CAR_MAX_TURN_SPEED
             );
         }
-    } else {
+    } else if (Math.abs(carState.turningSpeed) > 0) {
         // Return wheel rotation slowly back to 0
-        if (carState.turningSpeed > 0) {
-            carState.turningSpeed = Math.max(
-                carState.turningSpeed - CAR_DELTA_TURN_SPEED,
-                0
-            );
-        } else {
-            carState.turningSpeed = Math.min(
-                carState.turningSpeed + CAR_DELTA_TURN_SPEED,
-                0
-            );
-        }
+        const shouldNegate = carState.turningSpeed < 0 ? -1 : 1;
+
+        carState.turningSpeed =
+            carState.turningSpeed -
+            Math.min(CAR_DELTA_TURN_SPEED, Math.abs(carState.turningSpeed)) *
+                shouldNegate;
     }
 
     if (Math.abs(carState.drivingSpeed) > 0)
@@ -134,12 +143,16 @@ function setCarPosition(drivingSpeed, delta) {
 }
 
 function setCarRotation(turningSpeed, delta) {
+    console.log(turningSpeed);
     incrementCustomProperty(carElement, "--rotation", turningSpeed * delta);
 }
 
 function handleKeyEvent(event) {
     let isKeyDown = event.type === "keydown";
     switch (event.key) {
+        case " ":
+            playerInput.isPushingBreak = isKeyDown;
+            break;
         case "a":
         case "ArrowLeft":
             playerInput.isTurningWheel = isKeyDown;
@@ -152,13 +165,13 @@ function handleKeyEvent(event) {
             break;
         case "w":
         case "ArrowUp":
-            playerInput.isPushingPedal = isKeyDown;
-            playerInput.isPushingAccelerator = isKeyDown;
+            playerInput.isPushingGasPedal = isKeyDown;
+            playerInput.isInForwardGear = isKeyDown;
             break;
         case "s":
         case "ArrowDown":
-            playerInput.isPushingPedal = isKeyDown;
-            playerInput.isPushingAccelerator = !isKeyDown;
+            playerInput.isPushingGasPedal = isKeyDown;
+            playerInput.isInForwardGear = !isKeyDown;
             break;
     }
 }
