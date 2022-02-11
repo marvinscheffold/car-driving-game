@@ -5,3 +5,7 @@ Messing around with vanilla script and trying to get it to feel as natural as po
 Try it out but don´t hit the 🌳´s 
 
 ![Demo Video](./imgs/demo.gif)
+
+## Live Version
+
+[Click here](https://marvinscheffold.github.io/car-driving-game)
