@@ -1,11 +1,8 @@
-import { isInBetween } from "./helpers.js";
 import {
     incrementCustomProperty,
     getCustomProperty,
     setCustomProperty,
 } from "./htmlInterface.js";
-
-const carElement = document.querySelector("[data-car]");
 
 const CAR_MAX_DRIVE_SPEED = 0.75;
 const CAR_ACCELERATION = 0.025;
@@ -28,7 +25,7 @@ let playerInput = {
     isTurningWheelRight: false,
 };
 
-export function setUpCar(mapWidth, mapHeight) {
+export function setUpCar(mapElement) {
     carState = {
         drivingSpeed: 0,
         turningSpeed: 0,
@@ -37,8 +34,8 @@ export function setUpCar(mapWidth, mapHeight) {
     document.addEventListener("keydown", handleKeyEvent);
     document.removeEventListener("keyup", handleKeyEvent);
     document.addEventListener("keyup", handleKeyEvent);
-    carElement.classList.remove("hide");
-    setCarStartPosition(mapWidth, mapHeight);
+    removeCar();
+    spawnCarInRandomPosition(mapElement);
 }
 
 export function updateCar(delta) {
@@ -114,25 +111,39 @@ export function updateCar(delta) {
         setCarRotation(carState.turningSpeed, delta);
 }
 
-function setCarStartPosition(mapWidth, mapHeight) {
+function removeCar() {
+    document
+        .querySelectorAll("[data-car]")
+        .forEach((carElement) => carElement.remove());
+}
+
+function spawnCarInRandomPosition(mapElement) {
+    const carElement = document.createElement("img");
+    carElement.src = "./imgs/car.png";
+    carElement.classList.add("car");
+    carElement.dataset.car = true;
+
     setCustomProperty(
         carElement,
         "--bottom",
-        Math.floor(Math.random() * mapHeight)
+        Math.floor(Math.random() * mapElement.clientHeight)
     );
     setCustomProperty(
         carElement,
         "--left",
-        Math.floor(Math.random() * mapWidth)
+        Math.floor(Math.random() * mapElement.clientWidth)
     );
     setCustomProperty(
         carElement,
         "--rotation",
         Math.floor(Math.random() * 360)
     );
+
+    mapElement.appendChild(carElement);
 }
 
 function setCarPosition(drivingSpeed, delta) {
+    const carElement = getCarElement();
     const currentRotationDegrees =
         getCustomProperty(carElement, "--rotation") % 360;
     const currentRotationRadian = (currentRotationDegrees * Math.PI) / 180;
@@ -143,7 +154,7 @@ function setCarPosition(drivingSpeed, delta) {
 }
 
 function setCarRotation(turningSpeed, delta) {
-    console.log(turningSpeed);
+    const carElement = getCarElement();
     incrementCustomProperty(carElement, "--rotation", turningSpeed * delta);
 }
 
@@ -174,4 +185,8 @@ function handleKeyEvent(event) {
             playerInput.isInForwardGear = !isKeyDown;
             break;
     }
+}
+
+export function getCarElement() {
+    return document.querySelector("[data-car]");
 }

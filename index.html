@@ -5,13 +5,26 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Car Driving</title>
-        <link rel="stylesheet" href="./styles.css">
-        <script defer type="module" src="./main.js"></script>
+        <link rel="stylesheet" href="./src/styles.css">
+        <script defer type="module" src="./src/js/main.js"></script>
     </head>
     <body>
         <div class="world" data-map>
             <img class="car hide" src="./imgs/car.png" data-car></img>
-            <h1 class="h1" data-text>Press any key to drive 🚗</h1>
+            <div class="text-big" data-text-start>
+                Drive to the <span class="text-red">RED</span> Area <br>
+                but don´t hit the 🌳´s
+                <br>
+                <br>
+                Press any key to start
+            </div>
+            <div class="text-big hide" data-text-end>
+                You crashed 🏥!
+                <br>
+                <br>
+                Press any key to try again
+            </div>
+            <div class="text-lvl hide" data-lvl></div>
         </div>
     </body>
 </html>
