@@ -2,7 +2,7 @@ export function getCustomProperty(element, property) {
     return parseFloat(getComputedStyle(element).getPropertyValue(property));
 }
 
-function setCustomProperty(element, property, value) {
+export function setCustomProperty(element, property, value) {
     element.style.setProperty(property, value);
 }
 
