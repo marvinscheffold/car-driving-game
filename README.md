@@ -1,4 +1,7 @@
 # Car Driving Game
 
-Simple diving simulator with birds eye view. Messing around with vanilly script and trying to get it to feel as natural as possible 
+Simple car driving game with birds eye view.<br>
+Messing around with vanilla script and trying to get it to feel as natural as possible. <br>
+Try it out but don´t hit the 🌳´s 
 
+![Demo Video](./imgs/demo.gif)

@@ -51,7 +51,7 @@ body {
     top: 0;
     right: 0;
     margin: 3vh;
-    font-size: clamp(15px, 2vw, 40px);
+    font-size: clamp(20px, 3vw, 30px);
     z-index: 10;
 }
 
