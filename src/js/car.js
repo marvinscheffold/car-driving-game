@@ -39,9 +39,11 @@ export function setUpCar(mapElement) {
 }
 
 export function updateCar(delta) {
+    const shouldNegateDrivingSpeed = carState.drivingSpeed < 0 ? -1 : 1;
+    const shouldNegateTurningSpeed = carState.turningSpeed < 0 ? -1 : 1;
+
     if (playerInput.isPushingBreak) {
         // Decrease speed strongly
-        const shouldNegate = carState.drivingSpeed < 0 ? -1 : 1;
 
         carState.drivingSpeed =
             carState.drivingSpeed -
@@ -49,7 +51,7 @@ export function updateCar(delta) {
                 CAR_DEACCELERATION_BREAK,
                 Math.abs(carState.drivingSpeed)
             ) *
-                shouldNegate;
+                shouldNegateDrivingSpeed;
     } else if (playerInput.isPushingGasPedal) {
         // Increase car speed
         if (playerInput.isInForwardGear) {
@@ -66,15 +68,13 @@ export function updateCar(delta) {
     } else if (Math.abs(carState.drivingSpeed) > 0) {
         // Let car roll out and finally stop
         // Decrease speed softly
-        const shouldNegate = carState.drivingSpeed < 0 ? -1 : 1;
-
         carState.drivingSpeed =
             carState.drivingSpeed -
             Math.min(
                 CAR_DEACCELARATION_AUTOMATIC,
                 Math.abs(carState.drivingSpeed)
             ) *
-                shouldNegate;
+                shouldNegateDrivingSpeed;
     }
 
     // Turn car when player turns wheel and car is moving fast enough
@@ -96,12 +96,11 @@ export function updateCar(delta) {
         }
     } else if (Math.abs(carState.turningSpeed) > 0) {
         // Return wheel rotation slowly back to 0
-        const shouldNegate = carState.turningSpeed < 0 ? -1 : 1;
 
         carState.turningSpeed =
             carState.turningSpeed -
             Math.min(CAR_DELTA_TURN_SPEED, Math.abs(carState.turningSpeed)) *
-                shouldNegate;
+                shouldNegateTurningSpeed;
     }
 
     if (Math.abs(carState.drivingSpeed) > 0)
