@@ -1,6 +1,8 @@
 # Car Driving Game
 
-Simple car driving game with birds eye view. Messing around with vanilla script. Try it out but don´t hit the 🌳´s
+- Simple car driving game with birds eye view. 
+- Messing around with vanilla script. 
+- Try it out but don´t hit the 🌳´s
 
 ![Demo Video](./imgs/demo.gif)
 
