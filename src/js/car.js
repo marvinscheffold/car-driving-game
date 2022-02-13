@@ -73,13 +73,11 @@ export function updateCar(delta) {
     ) {
         // Increase turn speed by delta until max is reached
         let turningSpeedDelta;
-        if (playerInput.isTurningWheelRight) {
-            turningSpeedDelta =
-                CAR_DELTA_TURN_SPEED * shouldNegateDrivingSpeedDelta;
-        } else {
-            turningSpeedDelta =
-                -1 * CAR_DELTA_TURN_SPEED * shouldNegateDrivingSpeedDelta;
-        }
+        turningSpeedDelta =
+            (playerInput.isTurningWheelRight
+                ? CAR_DELTA_TURN_SPEED
+                : -1 * CAR_DELTA_TURN_SPEED) * shouldNegateDrivingSpeedDelta;
+
         // Check if turn speed limit is reached
         carState.turningSpeed = clamp(
             carState.turningSpeed + turningSpeedDelta,
