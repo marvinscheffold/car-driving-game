@@ -25,3 +25,6 @@ export function isCompleteOverlap(element1, element2) {
         rect1.bottom < rect2.bottom
     );
 }
+
+// Clamp number between two values with the following line:
+export const clamp = (num, min, max) => Math.min(Math.max(num, min), max);

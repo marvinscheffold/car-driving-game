@@ -3,11 +3,12 @@ import {
     getCustomProperty,
     setCustomProperty,
 } from "./htmlInterface.js";
+import { clamp } from "./helpers.js";
 
 const CAR_MAX_DRIVE_SPEED = 0.75;
-const CAR_ACCELERATION = 0.025;
-const CAR_DEACCELERATION_BREAK = 0.03;
-const CAR_DEACCELARATION_AUTOMATIC = 0.008;
+const CAR_ACCELERATION = 0.022;
+const CAR_DEACCELERATION_BREAK = -0.03;
+const CAR_DEACCELERATION_AUTOMATIC = -0.008;
 const CAR_MAX_TURN_SPEED = 0.18;
 const CAR_DELTA_TURN_SPEED = 0.025;
 const CAR_MIN_DRIVE_SPEED_TO_TURN = 0.05;
@@ -39,68 +40,58 @@ export function setUpCar(mapElement) {
 }
 
 export function updateCar(delta) {
-    const shouldNegateDrivingSpeed = carState.drivingSpeed < 0 ? -1 : 1;
-    const shouldNegateTurningSpeed = carState.turningSpeed < 0 ? -1 : 1;
+    const shouldNegateDrivingSpeedDelta = carState.drivingSpeed < 0 ? -1 : 1;
+    const shouldNegateTurningSpeedDelta = carState.turningSpeed < 0 ? -1 : 1;
 
+    let drivingSpeedDelta = 0;
     if (playerInput.isPushingBreak) {
         // Decrease speed strongly
-
-        carState.drivingSpeed =
-            carState.drivingSpeed -
-            Math.min(
-                CAR_DEACCELERATION_BREAK,
-                Math.abs(carState.drivingSpeed)
-            ) *
-                shouldNegateDrivingSpeed;
+        drivingSpeedDelta =
+            CAR_DEACCELERATION_BREAK * shouldNegateDrivingSpeedDelta;
     } else if (playerInput.isPushingGasPedal) {
         // Increase car speed
-        if (playerInput.isInForwardGear) {
-            carState.drivingSpeed = Math.min(
-                carState.drivingSpeed + CAR_ACCELERATION,
-                CAR_MAX_DRIVE_SPEED
-            );
-        } else {
-            carState.drivingSpeed = Math.max(
-                carState.drivingSpeed - CAR_DEACCELERATION_BREAK,
-                -CAR_MAX_DRIVE_SPEED
-            );
-        }
+        drivingSpeedDelta = playerInput.isInForwardGear
+            ? CAR_ACCELERATION
+            : -CAR_ACCELERATION;
     } else if (Math.abs(carState.drivingSpeed) > 0) {
         // Let car roll out and finally stop
         // Decrease speed softly
-        carState.drivingSpeed =
-            carState.drivingSpeed -
-            Math.min(
-                CAR_DEACCELARATION_AUTOMATIC,
-                Math.abs(carState.drivingSpeed)
-            ) *
-                shouldNegateDrivingSpeed;
+        drivingSpeedDelta =
+            CAR_DEACCELERATION_AUTOMATIC * shouldNegateDrivingSpeedDelta;
     }
+    // Add drivingSpeedDelta to drivingSpeed
+    carState.drivingSpeed = clamp(
+        carState.drivingSpeed + drivingSpeedDelta,
+        -CAR_MAX_DRIVE_SPEED,
+        CAR_MAX_DRIVE_SPEED
+    );
 
     // Turn car when player turns wheel and car is moving fast enough
     if (
         playerInput.isTurningWheel &&
         Math.abs(carState.drivingSpeed) > CAR_MIN_DRIVE_SPEED_TO_TURN
     ) {
-        // Increase turn speed depending on how fast car is
+        // Increase turn speed by delta until max is reached
+        let turningSpeedDelta;
         if (playerInput.isTurningWheelRight) {
-            carState.turningSpeed = Math.min(
-                carState.turningSpeed + CAR_DELTA_TURN_SPEED,
-                CAR_MAX_TURN_SPEED
-            );
+            turningSpeedDelta =
+                CAR_DELTA_TURN_SPEED * shouldNegateDrivingSpeedDelta;
         } else {
-            carState.turningSpeed = Math.max(
-                carState.turningSpeed - CAR_DELTA_TURN_SPEED,
-                -CAR_MAX_TURN_SPEED
-            );
+            turningSpeedDelta =
+                -1 * CAR_DELTA_TURN_SPEED * shouldNegateDrivingSpeedDelta;
         }
+        // Check if turn speed limit is reached
+        carState.turningSpeed = clamp(
+            carState.turningSpeed + turningSpeedDelta,
+            -CAR_MAX_TURN_SPEED,
+            CAR_MAX_TURN_SPEED
+        );
     } else if (Math.abs(carState.turningSpeed) > 0) {
-        // Return wheel rotation slowly back to 0
-
+        // Return turn speed slowly back to 0 if car is moving
         carState.turningSpeed =
             carState.turningSpeed -
             Math.min(CAR_DELTA_TURN_SPEED, Math.abs(carState.turningSpeed)) *
-                shouldNegateTurningSpeed;
+                shouldNegateTurningSpeedDelta;
     }
 
     if (Math.abs(carState.drivingSpeed) > 0)
