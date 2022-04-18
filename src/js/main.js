@@ -2,11 +2,13 @@ import { getCarElement, setUpCar, updateCar } from "./car.js";
 import { getTreeElements, setUpTrees } from "./tree.js";
 import { isCompleteOverlap, isOverlap } from "./helpers.js";
 import { getGoalElement, setUpGoal } from "./goal.js";
+import { debugWithMousePosition } from "./debug.js";
 const textStartElement = document.querySelector("[data-text-start]");
 const textEndElement = document.querySelector("[data-text-end]");
 const lvlElement = document.querySelector("[data-lvl]");
 const mapElement = document.querySelector("[data-map]");
 document.addEventListener("keydown", startGame, { once: true });
+debugWithMousePosition();
 
 let lvl = 0;
 let lastTime = 0;
@@ -27,6 +29,7 @@ function update(time) {
     }
 
     if (isGameLost()) {
+        console.log(getCarElement().getBoundingClientRect());
         endGame();
         return false;
     }

@@ -24,6 +24,6 @@ export class Point {
     }
 
     distance(point) {
-        return Math.hypot(point.x - this.x, point.y - this.y);
+        return Math.abs(Math.hypot(point.x - this.x, point.y - this.y));
     }
 }

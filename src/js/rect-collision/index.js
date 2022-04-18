@@ -42,6 +42,11 @@ export function areRectanglesOverlapping(rectData1, rectData2) {
                 line.isPointOnLine(intersection) &&
                 line2.isPointOnLine(intersection)
             ) {
+                console.log("Intersection:", ...intersection.toArray());
+                console.log("Line Rect1", line);
+                console.log("Line Rect2", line2);
+                console.log("Rotation Rect1:", rect1.rotation);
+                console.log("Rect1", rect1);
                 return true;
             }
             return false;
