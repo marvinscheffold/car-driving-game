@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/marvinscheffold/car-driving-game/issues"
   },
-  "homepage": "https://github.com/marvinscheffold/car-driving-game#readme"
+  "homepage": "https://github.com/marvinscheffold/car-driving-game#readme",
+  "dependencies": {
+    "mathjs": "^10.4.3"
+  }
 }
