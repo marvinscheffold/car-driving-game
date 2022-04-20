@@ -13,15 +13,15 @@ export function isOverlap(element1, element2) {
         {
             cx: boundingClientRect1.x + boundingClientRect1.width / 2,
             cy: (boundingClientRect1.y + boundingClientRect1.height / 2) * -1,
-            width: element1.width,
-            height: element1.height,
+            width: element1.offsetWidth,
+            height: element1.offsetHeight,
             rotation: getCustomProperty(element1, "--rotation") % 360,
         },
         {
             cx: boundingClientRect2.x + boundingClientRect2.width / 2,
             cy: (boundingClientRect2.y + boundingClientRect2.height / 2) * -1,
-            width: element2.width,
-            height: element2.height,
+            width: element2.offsetWidth,
+            height: element2.offsetHeight,
             rotation: getCustomProperty(element2, "--rotation") % 360,
         }
     );
