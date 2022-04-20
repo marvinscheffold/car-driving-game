@@ -8,22 +8,20 @@ export function isInBetween(value, min, max) {
 export function isOverlap(element1, element2) {
     const boundingClientRect1 = element1.getBoundingClientRect();
     const boundingClientRect2 = element2.getBoundingClientRect();
-    console.log(boundingClientRect1);
-    console.log(boundingClientRect2);
 
     return areRectanglesOverlapping(
         {
-            cx: boundingClientRect1.x + 46.3 / 2,
-            cy: (boundingClientRect1.y + 105.15 / 2) * -1,
-            width: 46.3,
-            height: 105.15,
+            cx: boundingClientRect1.x + boundingClientRect1.width / 2,
+            cy: (boundingClientRect1.y + boundingClientRect1.height / 2) * -1,
+            width: element1.width,
+            height: element1.height,
             rotation: getCustomProperty(element1, "--rotation") % 360,
         },
         {
             cx: boundingClientRect2.x + boundingClientRect2.width / 2,
             cy: (boundingClientRect2.y + boundingClientRect2.height / 2) * -1,
-            width: boundingClientRect2.width,
-            height: boundingClientRect2.height,
+            width: element2.width,
+            height: element2.height,
             rotation: getCustomProperty(element2, "--rotation") % 360,
         }
     );
