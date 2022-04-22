@@ -72,11 +72,14 @@ body {
 .tree {
     --bottom: 0;
     --left: 0;
+    --rotation: 0;
     position: absolute;
     bottom: calc(var(--bottom) * 1px);
     left: calc(var(--left) * 1px);
     height: 17vh;
     width: auto;
+
+    transform: rotate(calc(var(--rotation) * 1deg));
 }
 
 .goal {

@@ -2,8 +2,8 @@ import {
     incrementCustomProperty,
     getCustomProperty,
     setCustomProperty,
-} from "./htmlInterface.js";
-import { clamp } from "./helpers.js";
+} from "../htmlInterface.js";
+import { clamp } from "../helpers.js";
 
 const CAR_MAX_DRIVE_SPEED = 0.75;
 const CAR_ACCELERATION = 0.022;
