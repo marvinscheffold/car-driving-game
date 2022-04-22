@@ -1,14 +1,17 @@
-import { getCarElement, setUpCar, updateCar } from "./car.js";
-import { getTreeElements, setUpTrees } from "./tree.js";
+import { getCarElement, setUpCar, updateCar } from "./game-objects/car.js";
+import { getTreeElements, setUpTrees } from "./game-objects/tree.js";
+import { getGoalElement, setUpGoal } from "./game-objects/goal.js";
 import { isCompleteOverlap, isOverlap } from "./helpers.js";
-import { getGoalElement, setUpGoal } from "./goal.js";
 import { debugWithMousePosition } from "./debug.js";
+
+//debugWithMousePosition();
+
 const textStartElement = document.querySelector("[data-text-start]");
 const textEndElement = document.querySelector("[data-text-end]");
 const lvlElement = document.querySelector("[data-lvl]");
 const mapElement = document.querySelector("[data-map]");
+
 document.addEventListener("keydown", startGame, { once: true });
-debugWithMousePosition();
 
 let lvl = 0;
 let lastTime = 0;

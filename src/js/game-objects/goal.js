@@ -1,4 +1,4 @@
-import { setCustomProperty } from "./htmlInterface.js";
+import { setCustomProperty } from "../htmlInterface.js";
 
 export function setUpGoal(mapElement) {
     removeAllGoals();
