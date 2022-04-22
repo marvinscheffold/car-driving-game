@@ -78,7 +78,7 @@ body {
     left: calc(var(--left) * 1px);
     height: 17vh;
     width: auto;
-    border: 3px solid black;
+
     transform: rotate(calc(var(--rotation) * 1deg));
 }
 
