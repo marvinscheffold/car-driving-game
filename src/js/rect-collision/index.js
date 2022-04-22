@@ -38,18 +38,10 @@ export function areRectanglesOverlapping(rectData1, rectData2) {
     return rect1Sides.some((line) => {
         return rect2Sides.some((line2) => {
             const intersection = line.intersect(line2);
-            if (
+            return (
                 line.isPointOnLine(intersection) &&
                 line2.isPointOnLine(intersection)
-            ) {
-                console.log("Intersection:", ...intersection.toArray());
-                console.log("Line Rect1", line);
-                console.log("Line Rect2", line2);
-                console.log("Rotation Rect1:", rect1.rotation);
-                console.log("Rect1", rect1);
-                return true;
-            }
-            return false;
+            );
         });
     });
 }
