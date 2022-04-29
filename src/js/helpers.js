@@ -22,7 +22,7 @@ export function isOverlap(element1, element2) {
             cy: (boundingClientRect2.y + boundingClientRect2.height / 2) * -1,
             width: element2.offsetWidth,
             height: element2.offsetHeight,
-            rotation: getCustomProperty(element2, "--rotation") % 360,
+            rotation: 0,
         }
     );
 }

@@ -51,13 +51,10 @@ function isGameLost() {
 }
 
 function isCollisionWithObstacles(element) {
-    const obstacleElements = getObstacleElements();
-    for (const obstacleElement of obstacleElements) {
-        if (isOverlap(element, obstacleElement)) {
-            return true;
-        }
-    }
-    return false;
+    const obstacleElements = [...getObstacleElements()];
+    return obstacleElements.some((obstacleElement) =>
+        isOverlap(element, obstacleElement)
+    );
 }
 
 function startGame() {
@@ -90,6 +87,7 @@ function startRound() {
     ) {
         setUpCar(mapElement);
     }
+
     window.requestAnimationFrame(update);
 }
 

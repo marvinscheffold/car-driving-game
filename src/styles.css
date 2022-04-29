@@ -26,7 +26,7 @@ body {
     --left: 0;
     --rotation: 0;
     height: clamp(100px, 15vh, 200px);
-    width: auto;
+    aspect-ratio: 46/105;
     position: absolute;
     bottom: calc(var(--bottom) * 1px);
     left: calc(var(--left) * 1px);
