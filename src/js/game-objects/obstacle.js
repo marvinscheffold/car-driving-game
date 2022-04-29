@@ -18,7 +18,7 @@ function removeAllObstacles() {
 
 function spawnObstacleInRandomPosition(mapElement) {
     const obstacleElement = document.createElement("img");
-    obstacleElement.src = "./imgs/tree.png";
+    obstacleElement.src = `./imgs/house-${Math.ceil(Math.random() * 5)}.jpg`;
     obstacleElement.classList.add("obstacle");
     obstacleElement.dataset.obstacle = true;
 

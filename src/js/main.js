@@ -1,5 +1,8 @@
 import { getCarElement, setUpCar, updateCar } from "./game-objects/car.js";
-import { getTreeElements, setUpTrees } from "./game-objects/tree.js";
+import {
+    getObstacleElements,
+    setUpObstacles,
+} from "./game-objects/obstacle.js";
 import { getGoalElement, setUpGoal } from "./game-objects/goal.js";
 import { isCompleteOverlap, isOverlap } from "./helpers.js";
 import { debugWithMousePosition } from "./debug.js";
@@ -32,7 +35,6 @@ function update(time) {
     }
 
     if (isGameLost()) {
-        console.log(getCarElement().getBoundingClientRect());
         endGame();
         return false;
     }
@@ -45,17 +47,14 @@ function isRoundWon() {
 }
 
 function isGameLost() {
-    return isCollisionWithTrees(getCarElement());
+    return isCollisionWithObstacles(getCarElement());
 }
 
-function isCollisionWithTrees(element) {
-    const treeElements = getTreeElements();
-    for (const treeElement of treeElements) {
-        if (isOverlap(element, treeElement)) {
-            return true;
-        }
-    }
-    return false;
+function isCollisionWithObstacles(element) {
+    const obstacleElements = [...getObstacleElements()];
+    return obstacleElements.some((obstacleElement) =>
+        isOverlap(element, obstacleElement)
+    );
 }
 
 function startGame() {
@@ -73,21 +72,22 @@ function endGame() {
 
 function startRound() {
     lvlElement.innerHTML = `LVL: ${lvl}`;
-    setUpTrees(mapElement, lvl);
+    setUpObstacles(mapElement, lvl);
     setUpGoal(mapElement);
     while (
-        isCollisionWithTrees(getGoalElement()) ||
+        isCollisionWithObstacles(getGoalElement()) ||
         !isCompleteOverlap(getGoalElement(), mapElement)
     ) {
         setUpGoal(mapElement);
     }
     setUpCar(mapElement);
     while (
-        isCollisionWithTrees(getCarElement()) ||
+        isCollisionWithObstacles(getCarElement()) ||
         !isCompleteOverlap(getCarElement(), mapElement)
     ) {
         setUpCar(mapElement);
     }
+
     window.requestAnimationFrame(update);
 }
 
