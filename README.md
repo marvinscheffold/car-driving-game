@@ -12,4 +12,5 @@
 
 ## Todo
 
--   Implement algorithm that checks collision of rectangles with rotation
+-   Implement algorithm that checks collision of rectangles with rotation ✅
+-   Show the player where the car is if he drives it off screen
