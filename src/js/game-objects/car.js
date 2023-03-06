@@ -124,7 +124,8 @@ function spawnCarInRandomPosition(mapElement) {
     setCustomProperty(
         carElement,
         "--rotation",
-        Math.floor(Math.random() * 360)
+        //Math.floor(Math.random() * 360)
+        0
     );
 
     mapElement.appendChild(carElement);

@@ -7,7 +7,7 @@ import { getGoalElement, setUpGoal } from "./game-objects/goal.js";
 import { isCompleteOverlap, isOverlap } from "./helpers.js";
 import { debugWithMousePosition } from "./debug.js";
 
-//debugWithMousePosition();
+debugWithMousePosition();
 
 const textStartElement = document.querySelector("[data-text-start]");
 const textEndElement = document.querySelector("[data-text-end]");
@@ -16,7 +16,7 @@ const mapElement = document.querySelector("[data-map]");
 
 document.addEventListener("keydown", startGame, { once: true });
 
-let lvl = 0;
+let lvl = 60;
 let lastTime = 0;
 let delta = 0;
 
