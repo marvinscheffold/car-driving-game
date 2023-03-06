@@ -16,7 +16,7 @@ const mapElement = document.querySelector("[data-map]");
 
 document.addEventListener("keydown", startGame, { once: true });
 
-let lvl = 60;
+let lvl = 0;
 let lastTime = 0;
 let delta = 0;
 
